@@ -25,9 +25,13 @@ class GetWeatherLoaded extends GetWeatherState {
   // final String city;
   // final String country;
   const GetWeatherLoaded({
+    //required this.location,
     required this.current,
     required this.forecast,
-    //required this.location,
+    // required this.lat,
+    // required this.lon,
+    // required this.city,
+    // required this.country,
   });
   @override
   List<Object> get props => [current, forecast];

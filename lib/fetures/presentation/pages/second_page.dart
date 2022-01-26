@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
 
 import 'package:test_simple_weather_app/core/utils/ratio.dart';
 import 'package:test_simple_weather_app/fetures/bloc/get_weather_bloc.dart';
 import 'package:test_simple_weather_app/fetures/data/datasource/remote_datasource.dart';
 import 'package:test_simple_weather_app/fetures/data/models/forcast.dart';
 import 'package:test_simple_weather_app/fetures/data/models/location.dart';
+import 'package:test_simple_weather_app/fetures/presentation/pages/home_page.dart';
 import 'package:test_simple_weather_app/fetures/presentation/widgets/app_bar.dart';
 import 'package:test_simple_weather_app/fetures/presentation/widgets/date_helper.dart';
 import 'package:test_simple_weather_app/fetures/presentation/widgets/image_helper.dart';
@@ -14,19 +16,17 @@ import 'package:test_simple_weather_app/fetures/presentation/widgets/string_exte
 class SecondScreen extends StatelessWidget {
   const SecondScreen({
     Key? key,
-    required this.location,
   }) : super(key: key);
-  final LocationWB location;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => GetWeatherBloc(
-          RepositoryProvider.of<WeatherDataSourceImpl>(context), location)
-        ..add(GetApiWeather()),
+        dataSourceImpl: RepositoryProvider.of<WeatherDataSourceImpl>(context),
+      )..add(GetApiWeather()),
       child: Scaffold(
         appBar: MyAppBar(
-          title: location.city,
+          title: city,
           context: context,
         ),
         body: SafeArea(

@@ -1,12 +1,15 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
 
 import 'package:test_simple_weather_app/core/utils/ratio.dart';
 import 'package:test_simple_weather_app/fetures/bloc/get_weather_bloc.dart';
+import 'package:test_simple_weather_app/fetures/data/datasource/base.dart';
 import 'package:test_simple_weather_app/fetures/data/datasource/remote_datasource.dart';
 import 'package:test_simple_weather_app/fetures/data/models/location.dart';
 import 'package:test_simple_weather_app/fetures/data/models/weather.dart';
+import 'package:test_simple_weather_app/fetures/presentation/pages/home_page.dart';
 import 'package:test_simple_weather_app/fetures/presentation/widgets/app_bar.dart';
 import 'package:test_simple_weather_app/fetures/presentation/widgets/details.dart';
 import 'package:test_simple_weather_app/fetures/presentation/widgets/dotted_line.dart';
@@ -16,19 +19,17 @@ import 'package:test_simple_weather_app/fetures/presentation/widgets/string_exte
 class FirstPage extends StatelessWidget {
   const FirstPage({
     Key? key,
-    required this.location,
   }) : super(key: key);
-  final LocationWB location;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => GetWeatherBloc(
-          RepositoryProvider.of<WeatherDataSourceImpl>(context), location)
-        ..add(GetApiWeather()),
+        dataSourceImpl: RepositoryProvider.of<WeatherDataSourceImpl>(context),
+      ),
       child: Scaffold(
         appBar: MyAppBar(
-          title: 'Today',
+          title: city,
           context: context,
         ),
         body: SafeArea(
@@ -46,7 +47,6 @@ class FirstPage extends StatelessWidget {
                 return Column(
                   children: <Widget>[
                     _CurrentWeater(
-                      location: location,
                       current: state.current,
                     ),
                     _DetailesWidgets(
@@ -56,7 +56,7 @@ class FirstPage extends StatelessWidget {
                   ],
                 );
               } else {
-                return const Text('Loading...');
+                return const Text('smth is wrong');
               }
             },
           ),
@@ -70,10 +70,10 @@ class _CurrentWeater extends StatelessWidget {
   const _CurrentWeater({
     Key? key,
     required this.current,
-    required this.location,
+    //required this.location,
   }) : super(key: key);
   final Weather current;
-  final LocationWB location;
+  //final LocationWB location;
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +97,7 @@ class _CurrentWeater extends StatelessWidget {
             width: widthRatio * 150),
         SizedBox(height: heightRatio * 15),
         Text(
-          "${location.city.capitalizeFirstOfEach}, ${location.country.capitalizeFirstOfEach}",
+          '', //"${location.city.capitalizeFirstOfEach}, ${location.country.capitalizeFirstOfEach}",
           style: Theme.of(context).textTheme.headline2,
         ),
         SizedBox(height: heightRatio * 15),

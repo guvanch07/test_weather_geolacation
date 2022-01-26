@@ -1,18 +1,30 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/src/provider.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:test_simple_weather_app/core/geolocator.dart';
-import 'package:test_simple_weather_app/fetures/bloc/get_weather_bloc.dart';
-import 'package:test_simple_weather_app/fetures/bloc/location.dart';
+import 'package:test_simple_weather_app/fetures/bloc/bloc/geolocation_bloc.dart';
+import 'package:test_simple_weather_app/fetures/data/datasource/base.dart';
 import 'package:test_simple_weather_app/fetures/data/datasource/remote_datasource.dart';
 import 'package:test_simple_weather_app/fetures/data/models/location.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:test_simple_weather_app/fetures/presentation/pages/first_page.dart';
 import 'package:test_simple_weather_app/fetures/presentation/pages/second_page.dart';
 
+String lat = "";
+String lon = "";
+String city = "";
+String country = "";
+
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({
+    Key? key,
+    //required this.location,
+  }) : super(key: key);
+  //final LocationWB location;
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -27,22 +39,32 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Future locationPoint() async {
+    Position pos = await determinePosition();
+    List<Placemark> pm =
+        await placemarkFromCoordinates(pos.latitude, pos.longitude);
+    Placemark place = pm[0];
+    setState(() {
+      lat = pos.latitude.toString();
+      lon = pos.longitude.toString();
+      city = place.locality.toString();
+      country = place.country.toString();
+      print(city);
+      print(lat);
+    });
+  }
+
+  final LocationWB location =
+      LocationWB(city: city, country: country, lat: lat, lon: lon);
+
   @override
   void initState() {
-    //determinePosition();
-    //BlocProvider.of<LocationPoint>(context).locationPoint();
-    context.read<LocationPoint>().locationPoint();
+    locationPoint();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<LocationPoint>();
-    final LocationWB location = LocationWB(
-        city: provider.city,
-        country: provider.country,
-        lat: provider.lat,
-        lon: provider.lon);
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
         activeColor: Colors.blueAccent,
@@ -64,16 +86,12 @@ class _HomeScreenState extends State<HomeScreen> {
         switch (index) {
           case 0:
             return CupertinoTabView(
-              builder: (context) => FirstPage(
-                location: location,
-              ),
+              builder: (context) => const FirstPage(),
             );
 
           case 1:
             return CupertinoTabView(
-              builder: (context) => SecondScreen(
-                location: location,
-              ),
+              builder: (context) => const SecondScreen(),
             );
 
           default:

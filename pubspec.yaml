@@ -37,7 +37,7 @@ dependencies:
   dotted_border: ^2.0.0+2
   dotted_line: ^3.1.0
   http: ^0.13.4
-  flutter_bloc: ^8.0.1
+  flutter_bloc: ^7.0.0
   equatable: ^2.0.3
   geocoding: ^2.0.2
   geolocator: ^8.0.3
