@@ -5,12 +5,12 @@ final ThemeData theme = ThemeData(
   textTheme: const TextTheme(
     headline1: TextStyle(
         color: kTempTextColor,
-        fontSize: 35,
+        fontSize: 33,
         fontWeight: FontWeight.w600,
         fontFamily: '.SF UI Display'),
     headline2: TextStyle(
         color: kTextColo,
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: FontWeight.normal,
         fontFamily: '.SF UI Display'),
     bodyText1: TextStyle(

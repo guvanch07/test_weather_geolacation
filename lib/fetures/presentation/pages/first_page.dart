@@ -1,4 +1,5 @@
 import 'package:dotted_line/dotted_line.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share_plus/share_plus.dart';
@@ -31,7 +32,7 @@ class FirstPage extends StatelessWidget {
             ),
       child: Scaffold(
         appBar: MyAppBar(
-          title: city,
+          title: "Today",
           context: context,
         ),
         body: SafeArea(
@@ -109,9 +110,9 @@ class _CurrentWeater extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "${current.temp.toInt()}°",
+              "${current.temp.toInt()}°C",
               style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                  fontSize: 22,
+                  fontSize: 25,
                   color: Colors.blueAccent,
                   fontWeight: FontWeight.normal),
             ),
@@ -165,10 +166,10 @@ class _DetailesWidgets extends StatelessWidget {
                 text: "${current.humidity.toInt()} %",
                 icon: Icons.cloud_outlined),
             DetailsHelper(
-                text: "${current.high.toInt()} mm",
-                icon: Icons.branding_watermark_sharp),
+                text: "${current.high.toInt()} mm", icon: CupertinoIcons.drop),
             DetailsHelper(
-                text: "${current.pressure}hPa", icon: Icons.accessible_forward),
+                text: "${current.pressure}hPa",
+                icon: CupertinoIcons.thermometer),
           ],
         ),
         SizedBox(
@@ -178,10 +179,10 @@ class _DetailesWidgets extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             DetailsHelper(
-                text: "${current.wind} km/h", icon: Icons.accessible_forward),
+                text: "${current.wind} km/h", icon: CupertinoIcons.wind),
             DetailsHelper(
                 text: "${current.feelsLike.toInt()}°",
-                icon: Icons.accessible_forward),
+                icon: CupertinoIcons.slash_circle),
           ],
         ),
         SizedBox(
@@ -207,7 +208,6 @@ class _Share extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final heightRatio = getHeightRatio(context);
     return InkWell(
       onTap: () async {
         await Share.share(
@@ -215,10 +215,8 @@ class _Share extends StatelessWidget {
       },
       child: Text(
         'Share',
-        style: Theme.of(context)
-            .textTheme
-            .headline1!
-            .copyWith(color: Colors.red, fontWeight: FontWeight.normal),
+        style: Theme.of(context).textTheme.headline2!.copyWith(
+            color: Colors.red, fontWeight: FontWeight.normal, fontSize: 22),
       ),
     );
   }

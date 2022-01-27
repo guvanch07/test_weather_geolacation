@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -12,9 +13,9 @@ import 'package:test_simple_weather_app/fetures/data/models/location.dart';
 import 'package:test_simple_weather_app/fetures/presentation/pages/first_page.dart';
 import 'package:test_simple_weather_app/fetures/presentation/pages/second_page.dart';
 
-String lat = "57.575";
-String lon = "27.898";
-String city = "Minsk";
+String lat = "23.44";
+String lon = "27.34";
+String city = "minsk";
 String country = "";
 
 class HomeScreen extends StatefulWidget {
@@ -104,3 +105,26 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+
+
+// class GetLocationWithCubit extends Cubit<String> {
+//   GetLocationWithCubit(String initialState) : super(initialState);
+
+//   Future locationPoint() async {
+//     Position pos = await determinePosition();
+//     List<Placemark> pm =
+//         await placemarkFromCoordinates(pos.latitude, pos.longitude);
+//     Placemark place = pm[0];
+
+//     emit(lat = pos.latitude.toString());
+//     emit(lon = pos.longitude.toString());
+//     emit(city = place.locality.toString());
+//     emit(country = place.country.toString());
+
+//     log(city);
+//     log(lat);
+//     log(lon);
+//     log(country);
+//   }
+// }

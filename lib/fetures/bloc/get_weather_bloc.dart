@@ -14,11 +14,9 @@ part 'get_weather_state.dart';
 
 class GetWeatherBloc extends Bloc<GetWeatherEvent, GetWeatherState> {
   final WeatherDataSourceImpl dataSourceImpl;
-  //final LocationWB location;
 
   GetWeatherBloc(
     this.dataSourceImpl,
-    //this.location,
   ) : super(GetWeatherLoading()) {
     on<GetApiWeather>((event, emit) async {
       emit(GetWeatherLoading());
@@ -28,15 +26,6 @@ class GetWeatherBloc extends Bloc<GetWeatherEvent, GetWeatherState> {
       final getcurrent = await dataSourceImpl.getCurrentWeather();
 
       emit(GetWeatherLoaded(current: getcurrent, forecast: getforcast));
-    });
-
-    on<GetApiCityLocation>((event, emit) async {
-      emit(GetWeatherLoading());
-      Position pos = await determinePosition();
-      List<Placemark> pm =
-          await placemarkFromCoordinates(pos.latitude, pos.longitude);
-      Placemark place = pm[0];
-      emit(GetWeatherLocation(location: place.locality.toString()));
     });
   }
 }

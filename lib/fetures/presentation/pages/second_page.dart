@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geocoding/geocoding.dart';
 
 import 'package:test_simple_weather_app/core/utils/ratio.dart';
 import 'package:test_simple_weather_app/fetures/bloc/get_weather_bloc.dart';
 import 'package:test_simple_weather_app/fetures/data/datasource/remote_datasource.dart';
 import 'package:test_simple_weather_app/fetures/data/models/forcast.dart';
-import 'package:test_simple_weather_app/fetures/data/models/location.dart';
 import 'package:test_simple_weather_app/fetures/presentation/pages/home_page.dart';
 import 'package:test_simple_weather_app/fetures/presentation/widgets/app_bar.dart';
 import 'package:test_simple_weather_app/fetures/presentation/widgets/date_helper.dart';
 import 'package:test_simple_weather_app/fetures/presentation/widgets/image_helper.dart';
 import 'package:test_simple_weather_app/fetures/presentation/widgets/string_extension.dart';
-import 'package:test_simple_weather_app/main.dart';
 
 class SecondScreen extends StatelessWidget {
   const SecondScreen({
@@ -62,34 +59,29 @@ class SecondScreen extends StatelessWidget {
   }
 }
 
-class _ListOfForecast extends StatefulWidget {
+class _ListOfForecast extends StatelessWidget {
   const _ListOfForecast({
     Key? key,
     required this.forecast,
   }) : super(key: key);
+
   final Forecast forecast;
 
-  @override
-  State<_ListOfForecast> createState() => _ListOfForecastState();
-}
-
-class _ListOfForecastState extends State<_ListOfForecast> {
-  int isSelected = 1;
-
   String _whichIsDay(int ind) {
-    if (widget.forecast.daily[ind].dt == DateTime.now().day) {
-      return 'TODAY'; //! Hmm dosnt work, how to fix
+    if (forecast.daily[ind].dt == DateTime.now().day) {
+      return 'TODAY'; //! Hmm dosnt work, must to fix
     } else {
-      return getDateFromTimestamp(widget.forecast.daily[ind].dt);
+      return getDateFromTimestamp(forecast.daily[ind].dt);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final heightRatio = getHeightRatio(context);
+    final widthRatio = getWidthRatio(context);
     return ListView.builder(
-      //physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: widget.forecast.daily.length,
+      itemCount: forecast.daily.length,
       itemBuilder: (context, ind) {
         return SizedBox(
           child: Column(
@@ -103,22 +95,16 @@ class _ListOfForecastState extends State<_ListOfForecast> {
                 ),
               ),
               SizedBox(
-                  height: 500,
+                  height: heightRatio * 280,
                   child: ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: widget.forecast.hourly.length,
+                      itemCount: forecast.hourly.length,
                       itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isSelected = index + 1;
-                            });
-                          },
-                          child: _ItemOfForecast(
-                            index: index,
-                            isSelected: isSelected,
-                            forecast: widget.forecast,
-                          ),
+                        return _ItemOfForecast(
+                          index: index,
+                          forecast: forecast,
+                          heightRatio: heightRatio,
+                          widthRatio: widthRatio,
                         );
                       })),
             ],
@@ -133,32 +119,22 @@ class _ItemOfForecast extends StatelessWidget {
   const _ItemOfForecast({
     Key? key,
     required this.index,
-    required this.isSelected,
+    required this.heightRatio,
     required this.forecast,
+    required this.widthRatio,
   }) : super(key: key);
   final int index;
-  final int isSelected;
+  final double heightRatio;
   final Forecast forecast;
-
-  //int isSelected = 1;
-
+  final double widthRatio;
   @override
   Widget build(BuildContext context) {
-    final heightRatio = getHeightRatio(context);
-    final widthRatio = getWidthRatio(context);
-    return Container(
+    return SizedBox(
       height: heightRatio * 70,
       width: double.infinity,
-      decoration: BoxDecoration(
-          border: Border.all(
-              color: index + 1 == isSelected
-                  ? Colors.blueAccent
-                  : Colors.transparent,
-              width: 3)),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Row(
-          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             getWeatherIcon(
                 icon: forecast.hourly[index].icon,

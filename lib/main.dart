@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_simple_weather_app/fetures/presentation/pages/home_page.dart';
 import 'package:test_simple_weather_app/theme.dart';
 
-import 'fetures/data/datasource/base.dart';
 import 'fetures/data/datasource/remote_datasource.dart';
 
 void main() {
@@ -20,7 +19,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider(create: (_) => GeoRepo()),
         RepositoryProvider(create: (context) => WeatherDataSourceImpl()),
       ],
       child: MaterialApp(
