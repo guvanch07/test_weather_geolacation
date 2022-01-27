@@ -19,20 +19,18 @@ class GetWeatherError extends GetWeatherState {
 class GetWeatherLoaded extends GetWeatherState {
   final Weather current;
   final Forecast forecast;
-  //final LocationWB location;
-  // final String lat;
-  // final String lon;
-  // final String city;
-  // final String country;
+
   const GetWeatherLoaded({
-    //required this.location,
     required this.current,
     required this.forecast,
-    // required this.lat,
-    // required this.lon,
-    // required this.city,
-    // required this.country,
   });
   @override
   List<Object> get props => [current, forecast];
+}
+
+class GetWeatherLocation extends GetWeatherState {
+  final String location;
+  const GetWeatherLocation({
+    required this.location,
+  });
 }

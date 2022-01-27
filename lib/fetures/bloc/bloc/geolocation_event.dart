@@ -17,3 +17,12 @@ class UpdateGeolocation extends GeolocationEvent {
   @override
   List<Object> get props => [position];
 }
+
+class UpdateGeolocationCity extends GeolocationEvent {
+  final String city;
+  const UpdateGeolocationCity({
+    required this.city,
+  });
+  @override
+  List<Object> get props => [city];
+}

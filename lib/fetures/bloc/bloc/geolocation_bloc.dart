@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:test_simple_weather_app/fetures/data/datasource/base.dart';
@@ -24,6 +25,8 @@ class GeolocationBloc extends Bloc<GeolocationEvent, GeolocationState> {
       yield* mapLoadToState();
     } else if (event is UpdateGeolocation) {
       yield* mapUpdateToState(event);
+    } else if (event is UpdateGeolocationCity) {
+      yield* maptoLocation();
     }
   }
 
@@ -32,6 +35,19 @@ class GeolocationBloc extends Bloc<GeolocationEvent, GeolocationState> {
     final Position position = await _geoRepo.getCurrentLocation();
 
     add(UpdateGeolocation(position: position));
+  }
+
+  Stream<GeolocationState> maptoLocation() async* {
+    final Position position = await _geoRepo.getCurrentLocation();
+    List<Placemark> pm =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    Placemark place = pm[0];
+    add(UpdateGeolocationCity(city: place.locality.toString()));
+  }
+
+  Stream<GeolocationState> mapUpdateToStateCity(
+      UpdateGeolocationCity event) async* {
+    yield GeolocationLoadedCity(city: event.city);
   }
 
   Stream<GeolocationState> mapUpdateToState(UpdateGeolocation event) async* {

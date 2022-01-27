@@ -1,22 +1,20 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:test_simple_weather_app/core/geolocator.dart';
-import 'package:test_simple_weather_app/fetures/bloc/bloc/geolocation_bloc.dart';
-import 'package:test_simple_weather_app/fetures/data/datasource/base.dart';
-import 'package:test_simple_weather_app/fetures/data/datasource/remote_datasource.dart';
+
 import 'package:test_simple_weather_app/fetures/data/models/location.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:test_simple_weather_app/fetures/presentation/pages/first_page.dart';
 import 'package:test_simple_weather_app/fetures/presentation/pages/second_page.dart';
 
-String lat = "";
-String lon = "";
-String city = "";
+String lat = "57.575";
+String lon = "27.898";
+String city = "Minsk";
 String country = "";
 
 class HomeScreen extends StatefulWidget {
@@ -39,6 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  final LocationWB location =
+      LocationWB(city: city, country: country, lat: lat, lon: lon);
+
   Future locationPoint() async {
     Position pos = await determinePosition();
     List<Placemark> pm =
@@ -49,13 +50,13 @@ class _HomeScreenState extends State<HomeScreen> {
       lon = pos.longitude.toString();
       city = place.locality.toString();
       country = place.country.toString();
-      print(city);
-      print(lat);
+
+      log(city);
+      log(lat);
+      log(lon);
+      log(country);
     });
   }
-
-  final LocationWB location =
-      LocationWB(city: city, country: country, lat: lat, lon: lon);
 
   @override
   void initState() {

@@ -15,11 +15,6 @@ abstract class DataSourceRepo {
   //Future<List<String>> locationPoint();
 }
 
-// String lat = "";
-// String lon = "";
-// String city = "London";
-// String country = "";
-
 class WeatherDataSourceImpl implements DataSourceRepo {
   @override
   Future<Forecast> getForecast() async {
@@ -43,7 +38,7 @@ class WeatherDataSourceImpl implements DataSourceRepo {
   @override
   Future<Weather> getCurrentWeather() async {
     try {
-      // String city = location.city;
+      //String city = location.city;
       var url =
           "https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey&units=metric";
 
@@ -55,23 +50,5 @@ class WeatherDataSourceImpl implements DataSourceRepo {
     } catch (e) {
       throw ServerException(message: 'get Exception');
     }
-  }
-}
-
-Future<Forecast> getForecast(String lat, String lon) async {
-  //LocationWB? location;
-  try {
-    // String lat = location.lat;
-    // String lon = location.lon;
-    var url =
-        "https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&appid=$apiKey&units=metric";
-
-    final response = await http.get(Uri.parse(url));
-
-    final forecast = Forecast.fromJson(jsonDecode(response.body));
-
-    return forecast;
-  } catch (e) {
-    throw ServerException(message: 'get Exception');
   }
 }

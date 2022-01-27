@@ -13,7 +13,15 @@ class GeolocationError extends GeolocationState {}
 
 class GeolocationLoaded extends GeolocationState {
   final Position position;
+
   const GeolocationLoaded({
     required this.position,
+  });
+}
+
+class GeolocationLoadedCity extends GeolocationState {
+  final String city;
+  const GeolocationLoadedCity({
+    required this.city,
   });
 }

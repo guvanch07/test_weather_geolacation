@@ -12,17 +12,19 @@ import 'package:test_simple_weather_app/fetures/presentation/widgets/app_bar.dar
 import 'package:test_simple_weather_app/fetures/presentation/widgets/date_helper.dart';
 import 'package:test_simple_weather_app/fetures/presentation/widgets/image_helper.dart';
 import 'package:test_simple_weather_app/fetures/presentation/widgets/string_extension.dart';
+import 'package:test_simple_weather_app/main.dart';
 
 class SecondScreen extends StatelessWidget {
   const SecondScreen({
     Key? key,
+    // required this.location,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => GetWeatherBloc(
-        dataSourceImpl: RepositoryProvider.of<WeatherDataSourceImpl>(context),
+        RepositoryProvider.of<WeatherDataSourceImpl>(context),
       )..add(GetApiWeather()),
       child: Scaffold(
         appBar: MyAppBar(

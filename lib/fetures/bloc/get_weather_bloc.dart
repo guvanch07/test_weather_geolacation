@@ -2,6 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:test_simple_weather_app/core/geolocator.dart';
 
 import 'package:test_simple_weather_app/fetures/data/datasource/remote_datasource.dart';
 import 'package:test_simple_weather_app/fetures/data/models/forcast.dart';
@@ -14,25 +16,27 @@ class GetWeatherBloc extends Bloc<GetWeatherEvent, GetWeatherState> {
   final WeatherDataSourceImpl dataSourceImpl;
   //final LocationWB location;
 
-  GetWeatherBloc({
-    required this.dataSourceImpl,
-  }) : super(GetWeatherLoading()) {
+  GetWeatherBloc(
+    this.dataSourceImpl,
+    //this.location,
+  ) : super(GetWeatherLoading()) {
     on<GetApiWeather>((event, emit) async {
       emit(GetWeatherLoading());
-      //final getLocation = dataSourceImpl;
+
       final getforcast = await dataSourceImpl.getForecast();
 
       final getcurrent = await dataSourceImpl.getCurrentWeather();
 
-      emit(GetWeatherLoaded(
-        current: getcurrent, forecast: getforcast,
+      emit(GetWeatherLoaded(current: getcurrent, forecast: getforcast));
+    });
 
-        ///forecast: getforcast,
-        // city: getLocation.city,
-        // country: getLocation.country,
-        // lat: getLocation.lat,
-        // lon: getLocation.lon,
-      ));
+    on<GetApiCityLocation>((event, emit) async {
+      emit(GetWeatherLoading());
+      Position pos = await determinePosition();
+      List<Placemark> pm =
+          await placemarkFromCoordinates(pos.latitude, pos.longitude);
+      Placemark place = pm[0];
+      emit(GetWeatherLocation(location: place.locality.toString()));
     });
   }
 }

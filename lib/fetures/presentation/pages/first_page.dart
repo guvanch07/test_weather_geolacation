@@ -1,13 +1,11 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geocoding/geocoding.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'package:test_simple_weather_app/core/utils/ratio.dart';
 import 'package:test_simple_weather_app/fetures/bloc/get_weather_bloc.dart';
-import 'package:test_simple_weather_app/fetures/data/datasource/base.dart';
 import 'package:test_simple_weather_app/fetures/data/datasource/remote_datasource.dart';
-import 'package:test_simple_weather_app/fetures/data/models/location.dart';
 import 'package:test_simple_weather_app/fetures/data/models/weather.dart';
 import 'package:test_simple_weather_app/fetures/presentation/pages/home_page.dart';
 import 'package:test_simple_weather_app/fetures/presentation/widgets/app_bar.dart';
@@ -19,14 +17,18 @@ import 'package:test_simple_weather_app/fetures/presentation/widgets/string_exte
 class FirstPage extends StatelessWidget {
   const FirstPage({
     Key? key,
+    //required this.location,
   }) : super(key: key);
+  //final LocationWB location;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => GetWeatherBloc(
-        dataSourceImpl: RepositoryProvider.of<WeatherDataSourceImpl>(context),
-      ),
+      create: (context) =>
+          GetWeatherBloc(RepositoryProvider.of<WeatherDataSourceImpl>(context))
+            ..add(
+              GetApiWeather(),
+            ),
       child: Scaffold(
         appBar: MyAppBar(
           title: city,
@@ -52,7 +54,9 @@ class FirstPage extends StatelessWidget {
                     _DetailesWidgets(
                       current: state.current,
                     ),
-                    const _Share()
+                    _Share(
+                      current: state.current,
+                    )
                   ],
                 );
               } else {
@@ -97,7 +101,7 @@ class _CurrentWeater extends StatelessWidget {
             width: widthRatio * 150),
         SizedBox(height: heightRatio * 15),
         Text(
-          '', //"${location.city.capitalizeFirstOfEach}, ${location.country.capitalizeFirstOfEach}",
+          "${city.capitalizeFirstOfEach}, ${country.capitalizeFirstOfEach}",
           style: Theme.of(context).textTheme.headline2,
         ),
         SizedBox(height: heightRatio * 15),
@@ -195,17 +199,27 @@ class _DetailesWidgets extends StatelessWidget {
 }
 
 class _Share extends StatelessWidget {
-  const _Share({Key? key}) : super(key: key);
+  const _Share({
+    Key? key,
+    required this.current,
+  }) : super(key: key);
+  final Weather current;
 
   @override
   Widget build(BuildContext context) {
     final heightRatio = getHeightRatio(context);
-    return Text(
-      'Share',
-      style: Theme.of(context)
-          .textTheme
-          .headline1!
-          .copyWith(color: Colors.red, fontWeight: FontWeight.normal),
+    return InkWell(
+      onTap: () async {
+        await Share.share(
+            "${current.temp.toInt()}°,${city.capitalizeFirstOfEach}, ${country.capitalizeFirstOfEach}");
+      },
+      child: Text(
+        'Share',
+        style: Theme.of(context)
+            .textTheme
+            .headline1!
+            .copyWith(color: Colors.red, fontWeight: FontWeight.normal),
+      ),
     );
   }
 }
