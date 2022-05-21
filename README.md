@@ -1,4 +1,4 @@
-# test_simple_weather_app
+# weather_app_with_geolocation
 
 A new Flutter project.
 
